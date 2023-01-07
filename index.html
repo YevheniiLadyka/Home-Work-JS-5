@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>
+      Фікс: <br />1: Щоб юзер не міг дублювати<br />2: Валідація якщо пусті
+      імпути, якщо хочаб одна не заповнена <br />
+      3: вік і телефон тільки цифри + щоб не менше нуля
+    </h2>
+    <input class="name" type="text" name="" id="" placeholder="name" />
+    <input class="age" type="text" name="" id="" placeholder="age" />
+    <input class="tel" type="text" name="" id="" placeholder="tel" />
+    <button id="submit">add</button>
+    <ol class="out"></ol>
+
+    <section>
+      sectio 2
+      <ol class="out2"></ol>
+      <button class="btn2">add</button>
+    </section>
+
+    <script>
+      let name = document.querySelector(".name");
+      let age = document.querySelector(".age");
+      let tel = document.querySelector(".tel");
+      let btn = document.querySelector("button");
+      let out = document.querySelector(".out");
+      let out2 = document.querySelector(".out2");
+
+      const values = [];
+
+      String.prototype.isNumber = function (v) {
+        return v.match(/^\d+$/);
+      };
+
+      function antiSpam(out, name, age, tel) {
+        if (values.find((n) => n === name) || values.find((t) => t === tel)) {
+          return false;
+        }
+        return true;
+      }
+
+      function userAdd(out, name, age, tel) {
+        if (!antiSpam(out, name, age, tel)) {
+          return;
+        }
+        if (name === "" || age === "" || tel === "") {
+          out.innerHTML = `Помилка`;
+        } else {
+          values.push(name, age, tel);
+          out.innerHTML += `
+   <li>
+     <span> Name: ${name}</span>
+     <span> Age: ${age}</span>
+     <a href="tel:${tel}">${tel}</a>
+   </li>`;
+        }
+      }
+
+      function onlyNumber(out, age, tel) {
+        if (!age || !tel) {
+          return;
+        }
+        if (!String(age).isNumber(age)) {
+          out.innerHTML = `Не коректний вік <br>`;
+        }
+        if (!String(tel).isNumber(tel)) {
+          out.innerHTML += "Не коректний номер телефону";
+        }
+      }
+
+      btn.onclick = () => {
+        userAdd(out, name.value, age.value, tel.value);
+        onlyNumber(out, age.value, tel.value);
+      };
+
+      document.querySelector(".btn2").onclick = () => {
+        userAdd(out2, name.value, age.value, tel.value);
+      };
+    </script>
+  </body>
+</html>
